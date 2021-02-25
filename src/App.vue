@@ -4,7 +4,8 @@
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #app {
+  margin-top: 0px;
 }
 </style>
