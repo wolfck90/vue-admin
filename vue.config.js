@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 module.exports = {
   // 基本路径
   publicPath: process.env.NODE_ENV === 'production' ? '' : '/',
@@ -9,15 +9,15 @@ module.exports = {
   /**
    * webpack配置,see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
    **/
-  chainWebpack: (config) => {
-  },
-  configureWebpack: (config) => {
-    config.resolve = { // 配置解析别名
+  chainWebpack: config => {},
+  configureWebpack: config => {
+    config.resolve = {
+      // 配置解析别名
       extensions: ['.js', '.json', '.vue'],
       alias: {
         // 定义相关缩写的路径
         '@': path.resolve(__dirname, './src'),
-        '@c': path.resolve(__dirname, './src/components'),  
+        '@c': path.resolve(__dirname, './src/components')
       }
     }
   },
@@ -32,10 +32,10 @@ module.exports = {
     // css预设器配置项
     loaderOptions: {
       // 如发现 css.modules 报错，请查看这里：http://www.web-jshtml.cn/#/detailed?id=12
-      scss: { 
+      scss: {
         prependData: `@import "./src/styles/main.scss";`
       }
-    },
+    }
     // 启用 CSS modules for all css / pre-processor files.
     // requireModuleExtension: true
   },
@@ -54,13 +54,20 @@ module.exports = {
     https: false, // 编译失败时刷新页面
     hot: true, // 开启热加载
     hotOnly: false,
-    proxy: null, // 设置代理
-    overlay: { // 全屏模式下是否显示脚本错误
+    proxy: {
+      // 设置代理
+      '/devApi': {
+        target: 'http://www.web-jshtml.cn/productapi',
+        pathRewrite: { '^/devApi': '' },
+        changeOrigin: true // target是域名的话，需要这个参数，
+      }
+    },
+    overlay: {
+      // 全屏模式下是否显示脚本错误
       warnings: true,
       errors: true
     },
-    before: app => {
-    }
+    before: app => {}
   },
   /**
    * 第三方插件配置
