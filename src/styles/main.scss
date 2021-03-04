@@ -1,5 +1,13 @@
-@import "./normalize";
+@import './config.scss';
 
-// li {
-//     list-style-type: none;
-// }
+@import './normalize';
+
+@import './element.scss';
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}

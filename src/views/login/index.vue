@@ -73,7 +73,7 @@
 // 导入加密 sha1
 import sha1 from 'js-sha1'
 // 导入api
-import { GetSms, Register, Login } from '@/api/login.js'
+import { GetSms, Register } from '@/api/login.js'
 // 导入composition-api
 import { reactive, ref } from '@vue/composition-api'
 // 导入工具函数，验证相关
@@ -144,7 +144,7 @@ export default {
     // 声明普通数据类型用ref
     const model = ref('login')
     // 登录按钮状态
-    const buttonStatus = ref(false)
+    const buttonStatus = ref(true)
     // 倒计时时间
     const timer = ref(null)
     // 获取验证码状态
@@ -190,8 +190,8 @@ export default {
       refs.loginForm.resetFields()
     }
     // 更新按钮状态
-    const updateButtonStatus = params => {
-      codeButtonStatus.status = params.satus
+    const updataButtonStatus = params => {
+      codeButtonStatus.status = params.status
       codeButtonStatus.text = params.text
     }
     // 倒计时
@@ -206,12 +206,12 @@ export default {
         if (time === 0) {
           // 清除定时器
           clearInterval(timer.value)
-          updateButtonStatus({
+          updataButtonStatus({
             status: false,
             text: '重新发送'
           })
         } else {
-          // codeButtonStatus.status = true
+          codeButtonStatus.status = true
           codeButtonStatus.text = `倒计时${time}秒`
         }
       }, 1000)
@@ -219,7 +219,7 @@ export default {
     // 清除倒计时
     const clearCountDown = () => {
       clearInterval(timer.value)
-      updateButtonStatus({
+      updataButtonStatus({
         status: false,
         text: '获取验证码'
       })
@@ -242,7 +242,12 @@ export default {
         username: ruleForm.email,
         module: model.value
       }
-
+      // 禁用验证码按钮
+      // codeButtonStatus.status = true
+      updataButtonStatus({
+        status: true,
+        text: '发送中'
+      })
       // 延时发送
       GetSms(data)
         .then(response => {
@@ -252,17 +257,18 @@ export default {
             message: requestData.message,
             type: 'success'
           })
-          // 禁用验证码按钮
-          updateButtonStatus({
-            status: true,
-            text: '发送中'
-          })
           // 启用登录/注册按钮
           buttonStatus.value = false
           // 倒计时60s
           countDown(60)
         })
         .catch(error => {
+          // 启用登录或注册按钮
+          buttonStatus.value = false
+          updataButtonStatus({
+            status: false,
+            text: '再次获取'
+          })
           console.log(error)
         })
     }
@@ -286,13 +292,16 @@ export default {
         passWord: sha1(ruleForm.passWord),
         code: ruleForm.code
       }
-      Login(requestData)
+      root.$store
+        .dispatch('app/login', requestData)
         .then(response => {
           const data = response.data
           root.$message({
             message: data.message,
             type: 'success'
           })
+          // 通过路由跳转到console页面
+          root.$router.push({ name: 'Console' })
         })
         .catch(error => {
           console.log(error)

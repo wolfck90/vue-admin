@@ -1,0 +1,14 @@
+// 这里专门修改一些全局样式
+
+// 后台主页左侧菜单栏宽度
+$navMenu : 250px;
+$navMenuMin: 64px;
+$layoutHeader: 75px;
+
+@mixin webkit($type,$value) {
+    -webkit-#{$type}: $value;
+    -moz-#{$type}: $value;
+    -o-#{$type}: $value;
+    -ms-#{$type}: $value;
+    #{$type}:$value
+}
