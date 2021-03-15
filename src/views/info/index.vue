@@ -67,15 +67,16 @@
       v-loading="loadingData"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column prop="title" label="标题" width="830"> </el-table-column>
-      <el-table-column prop="categoryId" label="分类" width="180" :formatter="formatterCate"> </el-table-column>
-      <el-table-column prop="createDate" label="日期" :formatter="formatterTime"> </el-table-column>
-      <el-table-column prop="user" label="管理员"> </el-table-column>
+      <el-table-column type="selection" width="45"> </el-table-column>
+      <el-table-column prop="title" label="标题" width="750"> </el-table-column>
+      <el-table-column prop="categoryId" label="分类" width="130" :formatter="formatterCate"> </el-table-column>
+      <el-table-column prop="createDate" label="日期" :formatter="formatterTime" width="237"> </el-table-column>
+      <el-table-column prop="user" label="管理员" width="115"> </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" type="danger" @click="deleteInfo(scope.row.id)">删除</el-button>
           <el-button size="mini" type="success" @click="editInfo(scope.row.id)">编辑</el-button>
+          <el-button size="mini" type="success" @click="editInfo(scope.row.id)">编辑详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -102,7 +103,13 @@
     <!-- 新增信息对话框组件 -->
     <newInfoDialog :infoVisible.sync="infoDialog" :categoryInfo="options.categoryOptions" @getListEmit="getList" />
     <!-- 编辑信息对话框组件 -->
-    <editInfoDialog :editInfoVisible.sync="editDialog" :id="infoId" :categoryInfo="options.categoryOptions" @changeFlag= 'changeFlag' @getListEmit="getList"/>
+    <editInfoDialog
+      :editInfoVisible.sync="editDialog"
+      :id="infoId"
+      :categoryInfo="options.categoryOptions"
+      @changeFlag="changeFlag"
+      @getListEmit="getList"
+    />
   </div>
 </template>
 
@@ -151,7 +158,7 @@ export default {
     })
 
     // methods
-    const editInfo = (id) => {
+    const editInfo = id => {
       editDialog.value = true
       infoId.value = id
     }
