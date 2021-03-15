@@ -362,6 +362,7 @@ export default {
   margin: auto;
 }
 .menu-tab {
+  margin: 0;
   text-align: center;
   li {
     display: inline-block;

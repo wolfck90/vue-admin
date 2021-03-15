@@ -1,5 +1,4 @@
 // 这个专门用来修改element的样式
-
 .el-submenu .el-menu-item {
   font-size: 14px;
   padding-left: 50px !important;
@@ -7,13 +6,71 @@
     background-color: rgba(245, 108, 108, 0.2) !important;
   }
 }
-
-
-.el-menu--vertical {
-  .el-menu {
-    .el-menu-item {
-      background-color: skyblue !important;
-      color: springgreen !important;
+// 解决左边对不齐问题
+.el-menu {
+  border-right-width: 0;
+}
+/deep/ li.el-submenu {
+  &.is-active.is-opened .el-submenu__title {
+    background-color: $mainCcolor !important;
+  }
+}
+/deep/ .close {
+  .el-submenu {
+    &.is-opened {
+      > .el-submenu__title {
+        background-color: $mainCcolor !important;
+      }
     }
   }
+}
+.el-menu--vertical {
+  .el-menu.el-menu--popup {
+    background-color: $mainCcolor !important;
+  }
+  .el-menu-item {
+    line-height: 56px;
+    color: springgreen !important;
+  }
+  .el-menu-item:hover {
+    background-color: pink !important;
+  }
+}
+
+/deep/ div.el-table {
+  td,
+  th {
+    text-align: center;
+  }
+  th {
+    font-weight: 700;
+    color: #364a5e;
+  }
+  td {
+    font-size: 14px;
+  }
+}
+
+// dialog样式
+/deep/ .el-dialog__body {
+  padding:30px 47px !important;
+  .el-form {
+    .el-form-item:last-child {
+       margin-bottom: 0 !important;
+     }
+   }
+}
+
+/deep/ .el-dialog__footer {
+  text-align: center !important;
+  padding-bottom: 50px !important;
+  .el-button {
+    width: 150px;
+    margin: 0 11px;
+  }
+}
+
+/* 信息分类页面右边表单margin */
+div.el-form-item {
+  margin-top: 25px;
 }

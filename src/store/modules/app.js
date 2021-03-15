@@ -2,9 +2,9 @@ import { Login } from '../../api/login'
 import { setToken, removeToken, setUserName, getUserName, removeUserName } from '@/utils/app'
 
 const state = {
-  isCollapse: JSON.parse(sessionStorage.getItem('isCollapse')) || false,
+  isCollapse: false || JSON.parse(sessionStorage.getItem('isCollapse')),
   token: '',
-  username: getUserName() || ''
+  username: '' || getUserName()
 }
 
 const getters = {
@@ -56,7 +56,7 @@ const actions = {
   },
   // 退出
   exit({ commit }) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       // 清除cookie的数据
       removeToken()
       removeUserName()

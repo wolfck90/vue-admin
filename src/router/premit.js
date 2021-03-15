@@ -17,7 +17,6 @@ router.beforeEach((to, from, next) => {
       next()
     }
     next()
-    console.log('存在')
   } else {
     // 判断当前要进入的页面是否在白名单中，如果在，就放行，如果不在就跳转到login，请求用户登录
     if (whiteRouter.indexOf(to.path) !== -1) {

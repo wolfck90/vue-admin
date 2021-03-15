@@ -4,6 +4,7 @@
 $navMenu : 250px;
 $navMenuMin: 64px;
 $layoutHeader: 75px;
+$mainCcolor: skyblue;
 
 @mixin webkit($type,$value) {
     -webkit-#{$type}: $value;
@@ -11,4 +12,16 @@ $layoutHeader: 75px;
     -o-#{$type}: $value;
     -ms-#{$type}: $value;
     #{$type}:$value
+}
+
+@mixin labelDom($align,$width,$line-height) {
+    label {
+        float: left;
+        width: $width + px;
+        line-height: $line-height + px;
+        text-align: $align;
+      }
+      .label-content {
+        margin-left: $width + px
+      }
 }

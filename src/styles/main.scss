@@ -1,8 +1,6 @@
 @import './config.scss';
-
-@import './normalize';
-
 @import './element.scss';
+@import './normalize.scss';
 
 .pull-left {
   float: left;
@@ -10,4 +8,9 @@
 
 .pull-right {
   float: right;
+}
+
+// 高度占位，用于隔开内容
+.black-space-30 {
+  height: 30px;
 }

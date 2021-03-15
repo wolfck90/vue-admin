@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import { getToken, getUserName } from './app'
 
 const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/devApi'
 // 将axios赋值给service，就是替换个名字
@@ -13,9 +14,8 @@ service.interceptors.request.use(
   function(config) {
     // 在发送请求之前做些什么
     // 在请求头中添加一些数据传给后台，token,userId,sui
-    config.headers.token = '1111'
-    config.headers.userId = '2222'
-    config.headers.sui = '3333'
+    config.headers.tokey = getToken()
+    config.headers.UserName = getUserName()
 
     return config
   },
