@@ -22,9 +22,11 @@
             <span slot="title">{{ item.meta.name }}</span>
           </template>
           <!-- 子菜单 -->
-          <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id"
-            >{{ subItem.meta.name }}
-          </el-menu-item>
+          <template v-for="subItem in item.children" >
+            <el-menu-item :index="subItem.path" v-if="!subItem.hidden" :key="subItem.id"
+              >{{ subItem.meta.name }}
+            </el-menu-item>
+          </template>
         </el-submenu>
       </template>
     </el-menu>
@@ -78,7 +80,7 @@ export default {
   img {
     margin: 28px auto 25px;
     width: 92px;
-    @include webkit(transition, all .3s ease 0s)
+    @include webkit(transition, all 0.3s ease 0s);
   }
 }
 .open {
@@ -94,5 +96,4 @@ export default {
     width: 60%;
   }
 }
-
 </style>

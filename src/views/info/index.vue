@@ -76,7 +76,7 @@
         <template slot-scope="scope">
           <el-button size="mini" type="danger" @click="deleteInfo(scope.row.id)">删除</el-button>
           <el-button size="mini" type="success" @click="editInfo(scope.row.id)">编辑</el-button>
-          <el-button size="mini" type="success" @click="editInfo(scope.row.id)">编辑详情</el-button>
+          <el-button size="mini" type="success" @click="detailed(scope.row)">编辑详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -283,6 +283,20 @@ export default {
       const id = val.map(item => item.id)
       deleteInfoId.value = id
     }
+    // 点击跳转到详细信息页面
+    const detailed = (data) => {
+      // 跳转页面前先将数据存储在vuex中
+      root.$store.commit('infoDetail/set_id', data.id)
+      root.$store.commit('infoDetail/set_title', data.title)
+      // 跳转页面，把参数也带过去
+      root.$router.push({
+        name: 'InfoDetail',
+        params: {
+          id: data.id,
+          title: data.title
+        }
+      })
+    }
 
     onMounted(() => {
       // 获取分类信息
@@ -321,7 +335,8 @@ export default {
       formatterCate,
       handleSelectionChange,
       changeFlag,
-      formatData
+      formatData,
+      detailed
     }
   }
 }

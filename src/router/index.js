@@ -71,6 +71,15 @@ const routes = [
           name: '信息分类'
         },
         component: () => import('../views/info/category')
+      },
+      {
+        path: '/infoDetail',
+        name: 'InfoDetail',
+        hidden: true,
+        meta: {
+          name: '信息详情'
+        },
+        component: () => import('../views/info/detail')
       }
     ]
   },

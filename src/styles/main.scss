@@ -14,3 +14,13 @@
 .black-space-30 {
   height: 30px;
 }
+
+// 这个可以设置margin-left-(1-110)的值，就是可以设置左边距为1-110的值
+@for $i from 1 through 110 {
+  .margin-left-#{$i} {
+    margin-left: (1px * $i);
+  }
+}
+// .margin-left-10 {
+//   margin-left: 10px;
+// }
