@@ -40,10 +40,11 @@
         <div class="label-wrap key_word">
           <label for="">关键字：&nbsp;&nbsp;</label>
           <div class="label-content">
-            <el-select v-model="search_key" style="width:100%">
+            <SelectVue :config="data.configOption"></SelectVue>
+            <!-- <el-select v-model="search_key" style="width:100%">
               <el-option v-for="item in search_option" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
-            </el-select>
+            </el-select> -->
           </div>
         </div>
       </el-col>
@@ -53,8 +54,7 @@
       <el-col :span="2">
         <el-button type="danger" style="width:100%" @click="getList()">搜索</el-button>
       </el-col>
-      <!-- 这里不用:offset的原因是优先级不够 -->
-      <el-col :span="2" style="margin-left: 12.5%">
+      <el-col :span="2">
         <el-button type="danger" class="pull-right" style="width:100%" @click="newInfo()">新增</el-button>
       </el-col>
     </el-row>
@@ -120,9 +120,10 @@ import editInfoDialog from './dialog/editInfo'
 import { global } from '@/utils/global.js'
 import { GetList, DeleteInfo } from '@/api/news'
 import { timestampToTime } from '@/utils/common'
+import SelectVue from '@c/Select'
 export default {
   name: 'infoIndex',
-  components: { newInfoDialog, editInfoDialog },
+  components: { newInfoDialog, editInfoDialog, SelectVue },
   setup(props, { root }) {
     // 这里注意将confirm解构出来
     const { confirm } = global()
@@ -140,6 +141,11 @@ export default {
     // reactive
     const options = reactive({
       categoryOptions: []
+    })
+    const data = reactive({
+      configOption: {
+        init: ['id', 'title']
+      }
     })
 
     const search_option = reactive([
@@ -284,7 +290,7 @@ export default {
       deleteInfoId.value = id
     }
     // 点击跳转到详细信息页面
-    const detailed = (data) => {
+    const detailed = data => {
       // 跳转页面前先将数据存储在vuex中
       root.$store.commit('infoDetail/set_id', data.id)
       root.$store.commit('infoDetail/set_title', data.title)
@@ -316,6 +322,7 @@ export default {
       editDialog,
       infoId,
       // reactive
+      data,
       options,
       search_option,
       tableData,
