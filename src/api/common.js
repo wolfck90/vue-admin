@@ -39,3 +39,12 @@ export function QiniuToken(data) {
     data
   })
 }
+
+// 获取用户列表的数据
+export function GetUserList(params) {
+  return service.request({
+    method: params.method || 'post',
+    url: params.url,
+    data: params.data
+  })
+}

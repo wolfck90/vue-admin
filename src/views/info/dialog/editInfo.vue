@@ -136,7 +136,7 @@ export default {
           submitLoading.value = false
         )
     }
-    watch(() => (editDialog.value = props.editInfoVisible))
+    watch(() => props.editInfoVisible, () => (editDialog.value = props.editInfoVisible))
     return {
       // ref
       editDialog,

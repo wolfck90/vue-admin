@@ -115,7 +115,7 @@ export default {
           submitLoading.value = false
         )
     }
-    watch(() => (infoDialog.value = props.infoVisible))
+    watch(() => props.infoVisible, () => (infoDialog.value = props.infoVisible))
     return {
       // ref
       infoDialog,
