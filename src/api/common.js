@@ -48,3 +48,20 @@ export function GetUserList(params) {
     data: params.data
   })
 }
+/*
+  @params {
+    province: 省
+    city: 市
+    aera: 区
+    street：街道
+  }
+
+*/
+// 获取省市区
+export function GetCityPick(data) {
+  return service.request({
+    method: 'post',
+    url: '/cityPicker/',
+    data
+  })
+}

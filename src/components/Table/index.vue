@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="data.tableData" border style="width: 100%">
+    <el-table :data="data.tableData" border style="width: 100%" @selection-change="handleTableChange">
       <el-table-column v-if="data.tableConfig.selection" type="selection" width="45"> </el-table-column>
       <template v-for="item in data.tableConfig.tHead">
         <el-table-column
@@ -19,20 +19,28 @@
       </template>
     </el-table>
     <div class="black-space-20"></div>
-    <el-button size="medium" >批量删除</el-button>
-    <el-pagination
-      class="right"
-      v-if="data.tableConfig.paginationShow"
-      background
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageData.currentPage"
-      :page-sizes="pageData.pageSizes"
-      :page-size="pageData.pageSize"
-      :layout="data.tableConfig.paginationLayout"
-      :total="pageData.total"
-    >
-    </el-pagination>
+    <div class="footer">
+      <el-row>
+        <el-col :span="4">
+          <slot name="tableFooterLeft"></slot>
+        </el-col>
+        <el-col :span="20">
+          <el-pagination
+            class="right"
+            v-if="data.tableConfig.paginationShow"
+            background
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageData.currentPage"
+            :page-sizes="pageData.pageSizes"
+            :page-size="pageData.pageSize"
+            :layout="data.tableConfig.paginationLayout"
+            :total="pageData.total"
+          >
+          </el-pagination>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -46,9 +54,13 @@ export default {
     configTable: {
       type: Object,
       default: () => {}
+    },
+    tableRow: {
+      type: Object,
+      default: () => {}
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const { TableData, LoadTableData } = LoadData()
     const { pageData, handleSizeChange, handleCurrentChange, totalCount } = paginationHook()
     const data = reactive({
@@ -80,34 +92,54 @@ export default {
         if (keys.includes(key)) {
           data.tableConfig[key] = configTableData[key]
         }
-        // if (data.tableConfig[key]) {
-        //   data.tableConfig[key] = configTableData[key]
-        // }
       }
     }
-    // 监听TableData的数据变化，如果发生变化，将数值传给tableData
-    watch(
-      [() => TableData.item, () => TableData.total],
-      ([TableData, total]) => {
-        // 需要添加数据，这里数据库没有数据
-        data.tableData = TableData
-        totalCount(total)
+
+    // 当勾选的项发生变化时触发
+    const handleTableChange = (val) => {
+      // 获取id的集合
+      const RowData = {
+        idItem: val.map(item => item.id)
       }
-    )
-    // 监听页码数据
-    watch(
-      [() => pageData.currentPage, () => pageData.pageSize],
-      ([currentPage, pageSize]) => {
-        const requestData = data.tableConfig.requestData
-        // 第一次进入页面，因为页码没发生改变，不会触发监听器，所以requestData这里没有数据，当页码发生改变后，requestData里面会有data选项，里面包含了pageNumber，pageSize
-        if (requestData.data) {
-          // 更新数据
-          requestData.data.pageNumber = currentPage
-          requestData.data.pageSize = pageSize
-          // 调接口
-          LoadTableData(data.tableConfig.requestData)
-        }
+      // 将id集合发送给父组件
+      emit('update:tableRow', RowData)
+    }
+
+    // 刷新数据
+    const refreshData = () => {
+      LoadTableData(data.tableConfig.requestData)
+    }
+
+    // 带参数的刷新数据
+    const paramsRefreshData = (val) => {
+      console.log(val)
+      const requestData = Object.assign({}, val, {
+        pageNumber: 1,
+        pageSize: 3
       })
+      // 这里我们只改变data.tableConfig.requestData.data，不改变url和method，避免覆盖了
+      data.tableConfig.requestData.data = requestData
+      LoadTableData(data.tableConfig.requestData)
+    }
+    // 监听TableData的数据变化，如果发生变化，将数值传给tableData
+    watch([() => TableData.item, () => TableData.total], ([TableData, total]) => {
+      // 需要添加数据，这里数据库没有数据
+      data.tableData = TableData
+      totalCount(total)
+    })
+
+    // 监听页码数据
+    watch([() => pageData.currentPage, () => pageData.pageSize], ([currentPage, pageSize]) => {
+      const requestData = data.tableConfig.requestData
+      // 第一次进入页面，因为页码没发生改变，不会触发监听器，所以requestData这里没有数据，当页码发生改变后，requestData里面会有data选项，里面包含了pageNumber，pageSize
+      if (requestData.data) {
+        // 更新数据
+        requestData.data.pageNumber = currentPage
+        requestData.data.pageSize = pageSize
+        // 调接口
+        LoadTableData(data.tableConfig.requestData)
+      }
+    })
 
     onBeforeMount(() => {
       initTable()
@@ -119,7 +151,10 @@ export default {
       data,
       pageData,
       handleSizeChange,
-      handleCurrentChange
+      handleCurrentChange,
+      handleTableChange,
+      refreshData,
+      paramsRefreshData
     }
   }
 }

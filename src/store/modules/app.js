@@ -4,12 +4,14 @@ import { setToken, removeToken, setUserName, getUserName, removeUserName } from 
 const state = {
   isCollapse: false || JSON.parse(sessionStorage.getItem('isCollapse')),
   token: '',
-  username: '' || getUserName()
+  username: '' || getUserName(),
+  role: []
 }
 
 const getters = {
-  isCollapse: state => state.isCollapse
+  isCollapse: state => state.isCollapse,
   // username: state => state.username
+  role: state => state.role
 }
 
 const mutations = {
@@ -29,6 +31,10 @@ const mutations = {
   // 保存username
   set_username(state, value) {
     state.username = value
+  },
+  // 存储role
+  Set_Role(state, value) {
+    state.role = value
   }
 }
 
@@ -63,6 +69,7 @@ const actions = {
       // 清除vuex中的数据
       commit('set_token', '')
       commit('set_username', '')
+      commit('Set_Role', [])
       resolve()
     })
   }

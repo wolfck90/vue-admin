@@ -28,3 +28,12 @@ export function Register(data) {
     data
   })
 }
+
+// 获取用户角色
+export function GetUserRole(data = {}) {
+  return service.request({
+    url: '/userRole/',
+    method: 'post',
+    data
+  })
+}

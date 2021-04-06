@@ -27,7 +27,7 @@ export default {
     const exit = () => {
       root.$store.dispatch('app/exit').then(() => {
         // 路由跳转到login页面
-        root.$router.push({ name: 'Login' })
+        root.$router.replace({ name: 'Login' })
       })
     }
     return {

@@ -17,10 +17,9 @@ export function LoadData() {
     GetUserList(requestData)
       .then(response => {
         const responseData = response.data.data.data
-        if (responseData && responseData.length > 0) {
-          TableData.item = responseData
-          TableData.total = response.data.data.total
-        }
+        // 后台返回数据时，可能返回一个null，而不是返回一个空数组，为了避免出错，尽量要求返回数组，无论是否为空
+        TableData.item = responseData
+        TableData.total = responseData.length === 0 ? 0 : response.data.data.total
       })
       .catch()
   }

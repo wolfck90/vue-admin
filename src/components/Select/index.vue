@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select v-model="data.selectValue" placeholder="请选择">
+    <el-select v-model="data.selectValue" placeholder="请选择" @change = "select">
       <el-option v-for="item in data.selectInit" :key="item.value" :label="item.label" :value="item.value"> </el-option>
     </el-select>
   </div>
@@ -14,15 +14,19 @@ export default {
     config: {
       type: Object,
       default: () => {}
+    },
+    selectData: {
+      type: Object,
+      default: () => {}
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const data = reactive({
       selectValue: '',
       selectInit: [],
       options: [
         {
-          value: 'name',
+          value: 'truename',
           label: '姓名'
         },
         {
@@ -63,14 +67,23 @@ export default {
       }
       data.selectInit = OptionArr
       data.selectValue = data.selectInit[0].value
+      // 返回初始值到父组件
+      emit('update:selectData', OptionArr[0])
     }
 
+    const select = (val) => {
+      // 过滤，将data.options中value === val的数据过滤出来，返回给父组件
+      const filterData = data.options.filter(item => item.value === val)[0]
+      // console.log(filterData)
+      emit('update:selectData', filterData)
+    }
     onMounted(() => {
       initOptions()
     })
     return {
       data,
-      initOptions
+      initOptions,
+      select
     }
   }
 }
