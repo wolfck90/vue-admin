@@ -10,13 +10,13 @@
                 <SelectVue :config="data.configOptions" :selectData.sync = "data.selectData"></SelectVue>
               </el-col>
               <el-col :span="5"><el-input v-model="data.keyWord" placeholder="请输入关键字"></el-input></el-col>
-              <el-col :span="12"><el-button type="danger" size="medium" @click="search">搜索</el-button></el-col>
+              <el-col :span="12"><el-button type="danger" size="medium" @click="search" v-if="btnPerm('user:search')">搜索</el-button></el-col>
             </el-row>
           </div>
         </div>
       </el-col>
       <el-col :span="4">
-        <el-button type="danger" class="pull-right" size="medium" @click="addUser">添加用户</el-button>
+        <el-button type="danger" class="pull-right" size="medium" @click="addUser" v-if="btnPerm('user:add')">添加用户</el-button>
       </el-col>
     </el-row>
     <div class="black-space-30"></div>
@@ -34,11 +34,11 @@
         </el-switch>
       </template>
       <template v-slot:operation="slotData">
-        <el-button size="mini" type="danger" @click="delUser(slotData.data)">删除</el-button>
-        <el-button size="mini" type="success" @click="editUser(slotData.data)">编辑</el-button>
+        <el-button size="mini" type="danger" @click="delUser(slotData.data)" v-if="btnPerm('user:del')">删除</el-button>
+        <el-button size="mini" type="success" @click="editUser(slotData.data)" v-if="btnPerm('user:edit')">编辑</el-button>
       </template>
       <template v-slot:tableFooterLeft>
-        <el-button size="mini" @click="handlerbtnAllDel">批量删除</el-button>
+        <el-button size="mini" @click="handlerbtnAllDel" v-if="btnPerm('user:batchDel')">批量删除</el-button>
       </template>
     </TableVue>
     <!-- 新增用户对话框 -->
@@ -135,6 +135,7 @@ export default {
 
     // 搜索
     const search = () => {
+      console.log(data.selectData.value)
       const requestData = {
         [data.selectData.value]: data.keyWord
       }

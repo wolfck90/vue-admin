@@ -26,6 +26,20 @@
             <el-checkbox v-for="item in data.roleItem" :key="item.role" :label="item.role">{{ item.name }}</el-checkbox>
           </el-checkbox-group>
         </el-form-item>
+        <el-form-item label="按钮：" :label-width="formLabelWidth">
+          <template v-if="data.BtnPerm.length > 0">
+            <div v-for="(item, index) in data.BtnPerm" :key="index">
+              <h4>{{ item.name }}</h4>
+              <template v-if="item.perm && item.perm.length > 0">
+                <el-checkbox-group v-model="data.form.btnPerm">
+                  <el-checkbox v-for="buttons in item.perm" :key="buttons.value" :label="buttons.value">{{
+                    buttons.name
+                  }}</el-checkbox>
+                </el-checkbox-group>
+              </template>
+            </div>
+          </template>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="close">取 消</el-button>
@@ -40,7 +54,7 @@ import sha1 from 'js-sha1'
 import { reactive, ref, watch } from '@vue/composition-api'
 import CityPick from '@c/CityPick'
 import { validateEmails, validatePass, stripscript, validateTrueNames, validatePhones } from '@/utils/validate'
-import { GetRoles, GetSystem, AddUser } from '@/api/user'
+import { GetRoles, AddUser, GetBtnPerm } from '@/api/user'
 export default {
   name: 'AddUserDialog',
   components: { CityPick },
@@ -127,10 +141,14 @@ export default {
         // 禁用启用
         status: '2',
         // 角色
-        role: []
+        role: [],
+        // 按钮
+        btnPerm: []
       },
       // 角色选择
-      roleItem: []
+      roleItem: [],
+      // 按钮权限
+      BtnPerm: []
     })
 
     // 表单验证
@@ -152,16 +170,22 @@ export default {
 
     // 获取角色
     const getRole = () => {
+      // if (data.roleItem.length > 0 && data.BtnPerm.length > 0) return false
       if (data.roleItem.length === 0) {
         GetRoles().then(response => {
           data.roleItem = response.data.data
+        })
+      }
+      if (data.BtnPerm.length === 0) {
+        GetBtnPerm().then(response => {
+          data.BtnPerm = response.data.data
+          console.log(data.BtnPerm)
         })
       }
     }
     // 打开对话框时触发
     const opened = () => {
       getRole()
-      console.log(data.form)
     }
 
     // 关闭时清空内容
@@ -176,6 +200,7 @@ export default {
           const requestData = Object.assign({}, data.form)
           // 将role数组转成字符串，然后在赋值到requestData中
           requestData.role = requestData.role.join()
+          requestData.btnPerm = requestData.btnPerm.join()
           // 密码加密
           requestData.passWord = sha1(requestData.passWord)
           requestData.region = JSON.stringify(data.cityPickerData)

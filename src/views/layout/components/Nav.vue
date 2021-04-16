@@ -4,7 +4,7 @@
       <img src="../../../assets/logo.png" alt="" />
     </h1>
     <el-menu
-      default-active="1-4-1"
+      :default-active="defaultActive"
       class="el-menu-vertical-demo"
       @open="handleOpen"
       @close="handleClose"
@@ -42,6 +42,12 @@ export default {
     const routers = reactive(root.$router.options.routes)
     // 使用计算属性computed监听isCollapse的值
     const isCollapse = computed(() => root.$store.state.app.isCollapse)
+    // 监听路由变化
+    const defaultActive = computed(() => {
+      const route = root.$route
+      const { path } = route
+      return path
+    })
     // console.log(routers)
     const handleOpen = (key, keyPath) => {
       // console.log(key, keyPath)
@@ -54,7 +60,8 @@ export default {
       routers,
       isCollapse,
       handleOpen,
-      handleClose
+      handleClose,
+      defaultActive
     }
   }
 }

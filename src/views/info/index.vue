@@ -2,7 +2,7 @@
   <div>
     <el-row :gutter="14">
       <el-col :span="4">
-        <div class="label-wrap category">
+        <div class="label-wrap category clearfix">
           <label for="">分类：</label>
           <div class="label-content">
             <el-select v-model="category_value" placeholder="请选择">
@@ -18,26 +18,26 @@
         </div>
       </el-col>
       <el-col :span="7">
-        <div class="label-wrap date">
+        <div class="label-wrap date clearfix">
           <label for="">日期：&nbsp;&nbsp;</label>
           <div class="label-content">
-            <el-date-picker
-              style="width: 100%"
-              v-model="date_value"
-              type="datetimerange"
-              align="right"
-              format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :default-time="['12:00:00', '08:00:00']"
-            >
-            </el-date-picker>
+              <el-date-picker
+                style="width: 100%"
+                v-model="date_value"
+                type="datetimerange"
+                align="right"
+                format="yyyy 年 MM 月 dd 日"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :default-time="['12:00:00', '08:00:00']"
+              >
+              </el-date-picker>
           </div>
         </div>
       </el-col>
-      <el-col :span="3">
-        <div class="label-wrap key_word">
+      <el-col :span="4">
+        <div class="label-wrap key_word clearfix">
           <label for="">关键字：&nbsp;&nbsp;</label>
           <div class="label-content">
             <SelectVue :config="data.configOption"></SelectVue>
@@ -54,8 +54,9 @@
       <el-col :span="2">
         <el-button type="danger" style="width:100%" @click="getList()">搜索</el-button>
       </el-col>
+      <el-col :span="2"> </el-col>
       <el-col :span="2">
-        <el-button type="danger" class="pull-right" style="width:100%" @click="newInfo()">新增</el-button>
+        <el-button type="danger" class="pull-right" style="width:100%" @click="newInfo()" v-if="btnPerm('info:add')">新增</el-button>
       </el-col>
     </el-row>
     <div class="black-space-30"></div>
@@ -68,15 +69,21 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="45"> </el-table-column>
-      <el-table-column prop="title" label="标题" width="750"> </el-table-column>
+      <el-table-column prop="title" label="标题"> </el-table-column>
       <el-table-column prop="categoryId" label="分类" width="130" :formatter="formatterCate"> </el-table-column>
       <el-table-column prop="createDate" label="日期" :formatter="formatterTime" width="237"> </el-table-column>
       <el-table-column prop="user" label="管理员" width="115"> </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button size="mini" type="danger" @click="deleteInfo(scope.row.id)">删除</el-button>
-          <el-button size="mini" type="success" @click="editInfo(scope.row.id)">编辑</el-button>
-          <el-button size="mini" type="success" @click="detailed(scope.row)">编辑详情</el-button>
+          <el-button size="mini" type="danger" @click="deleteInfo(scope.row.id)" v-if="btnPerm('info:del')"
+            >删除</el-button
+          >
+          <el-button size="mini" type="success" @click="editInfo(scope.row.id)" v-if="btnPerm('info:edit')"
+            >编辑</el-button
+          >
+          <el-button size="mini" type="success" @click="detailed(scope.row)" v-if="btnPerm('info:detailed')"
+            >编辑详情</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -84,7 +91,7 @@
     <!-- 底部区域 -->
     <el-row>
       <el-col :span="12">
-        <el-button size="medium" @click="deleteAll">批量删除</el-button>
+        <el-button size="medium" @click="deleteAll" v-if="btnPerm('info:batchDel')">批量删除</el-button>
       </el-col>
       <el-col :span="12">
         <el-pagination
@@ -130,6 +137,7 @@ export default {
     // ref
     const category_value = ref('')
     const date_value = ref('')
+    const content = ref('')
     const search_key = ref('id')
     const search_word = ref('')
     const infoDialog = ref(false)
@@ -321,6 +329,7 @@ export default {
       deleteInfoId,
       editDialog,
       infoId,
+      content,
       // reactive
       data,
       options,
@@ -359,7 +368,16 @@ export default {
     @include labelDom(right, 93, 40);
   }
   &.key_word {
-    @include labelDom(right, 99, 40);
+    @include labelDom(right, 70, 40);
   }
+}
+.clearfix::before,
+.clearfix::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.clearfix {
+  zoom: 1;
 }
 </style>

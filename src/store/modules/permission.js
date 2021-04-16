@@ -65,12 +65,12 @@ const actions = {
             }
             return item
           }
-          // if (role.includes(item.meta.system)) {
-          //   return item
-          // }
+          return item
         })
+        // 在最后把404页面加入到路由最后面,404页面在动态路由最后一项
+        addRouters.push(asyncRouteMap[asyncRouteMap.length - 1])
       }
-      // 设置路由
+      // 更新路由
       commit('Set_Router', addRouters)
       resolve()
     })

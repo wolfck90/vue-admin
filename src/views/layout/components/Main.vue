@@ -2,7 +2,13 @@
   <div id="main_wrap">
     <div class="main-content">
       <div class="content">
-        <router-view></router-view>
+        <!-- 子路由显示区 -->
+        <keep-alive>
+          <!-- 需要缓存的组件 -->
+          <router-view v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+        <!-- 不缓存的组件 -->
+        <router-view v-if="!$route.meta.keepAlive"></router-view>
       </div>
     </div>
   </div>

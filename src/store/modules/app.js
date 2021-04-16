@@ -1,17 +1,19 @@
-import { Login } from '../../api/login'
+import { Login, Logout } from '../../api/login'
 import { setToken, removeToken, setUserName, getUserName, removeUserName } from '@/utils/app'
 
 const state = {
   isCollapse: false || JSON.parse(sessionStorage.getItem('isCollapse')),
   token: '',
   username: '' || getUserName(),
-  role: []
+  role: [],
+  buttonPermission: []
 }
 
 const getters = {
   isCollapse: state => state.isCollapse,
   // username: state => state.username
-  role: state => state.role
+  role: state => state.role,
+  buttonPermission: state => state.buttonPermission
 }
 
 const mutations = {
@@ -35,6 +37,10 @@ const mutations = {
   // 存储role
   Set_Role(state, value) {
     state.role = value
+  },
+  // 存储button权限
+  Set_Button(state, value) {
+    state.buttonPermission = value
   }
 }
 
@@ -61,16 +67,19 @@ const actions = {
     })
   },
   // 退出
-  exit({ commit }) {
+  logout({ commit }) {
     return new Promise(resolve => {
-      // 清除cookie的数据
-      removeToken()
-      removeUserName()
-      // 清除vuex中的数据
-      commit('set_token', '')
-      commit('set_username', '')
-      commit('Set_Role', [])
-      resolve()
+      Logout().then(response => {
+        const data = response.data
+        // 清除cookie的数据
+        removeToken()
+        removeUserName()
+        // 清除vuex中的数据
+        commit('set_token', '')
+        commit('set_username', '')
+        commit('Set_Role', [])
+        resolve(data)
+      })
     })
   }
 }

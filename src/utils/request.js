@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import { getToken, getUserName } from './app'
 
-const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/devApi'
+const BASEURL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_API : process.env.VUE_APP_API
 // 将axios赋值给service，就是替换个名字
 const service = axios.create({
   baseURL: BASEURL,

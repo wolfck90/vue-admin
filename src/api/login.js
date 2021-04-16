@@ -19,6 +19,15 @@ export function Login(data) {
   })
 }
 
+// 退出登录
+export function Logout(data = {}) {
+  return service.request({
+    url: '/logout/',
+    method: 'post',
+    data
+  })
+}
+
 // 注册
 
 export function Register(data) {

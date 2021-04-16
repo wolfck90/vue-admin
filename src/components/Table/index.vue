@@ -146,7 +146,6 @@ export default {
       // loadData()
       LoadTableData(data.tableConfig.requestData)
     })
-
     return {
       data,
       pageData,

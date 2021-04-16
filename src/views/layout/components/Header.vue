@@ -8,7 +8,7 @@
         <img src="../../../assets/images/face.png" alt="" />
         {{ username }}
       </div>
-      <div class="pull-left header-icon" @click="exit"><svg-icon iconClass="exit" className="exit"></svg-icon></div>
+      <div class="pull-left header-icon" @click="logout"><svg-icon iconClass="exit" className="exit"></svg-icon></div>
     </div>
   </div>
 </template>
@@ -24,8 +24,15 @@ export default {
     const username = computed(() => root.$store.state.app.username)
     // console.log(username.value)
     // 退出
-    const exit = () => {
-      root.$store.dispatch('app/exit').then(() => {
+    const logout = () => {
+      root.$store.dispatch('app/logout').then((response) => {
+        console.log(response)
+        if (response.resCode === 0) {
+          root.$message({
+            message: '退出成功',
+            type: 'success'
+          })
+        }
         // 路由跳转到login页面
         root.$router.replace({ name: 'Login' })
       })
@@ -33,7 +40,7 @@ export default {
     return {
       menuCollapse,
       username,
-      exit
+      logout
     }
   }
 }
@@ -48,6 +55,7 @@ export default {
   height: 75px;
   background-color: #fff;
   line-height: 75px;
+  z-index: 3;
   // box-shadow: 0 3px 16px 0 rgba(0, 0, 0, 0.1);
   @include webkit(box-shadow, 0 3px 16px 0 rgba(0, 0, 0, 0.1));
   @include webkit(transition, all 0.3s ease 0s);

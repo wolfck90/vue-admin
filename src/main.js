@@ -11,6 +11,10 @@ import '@/router/premit'
 // 引入自定义图标组件
 import './icon'
 
+// 全局引入按钮权限
+import { buttonPermission } from './utils/buttonPermission'
+Vue.prototype.btnPerm = buttonPermission
+
 Vue.use(ElementUI)
 Vue.use(VueCompositionApi)
 Vue.config.productionTip = false

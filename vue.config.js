@@ -67,9 +67,9 @@ module.exports = {
     hotOnly: false,
     proxy: {
       // 设置代理
-      '/devApi': {
+      [process.env.VUE_APP_API]: {
         target: 'http://www.web-jshtml.cn/productapi/token',
-        pathRewrite: { '^/devApi': '' },
+        pathRewrite: { [`^${process.env.VUE_APP_API}`]: '' },
         changeOrigin: true // target是域名的话，需要这个参数，
       }
     },

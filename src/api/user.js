@@ -59,3 +59,12 @@ export function GetRoles(data) {
     data
   })
 }
+
+// 获取按钮
+export function GetBtnPerm(data) {
+  return service.request({
+    method: 'post',
+    url: '/permButton/',
+    data
+  })
+}

@@ -75,7 +75,7 @@ import sha1 from 'js-sha1'
 // 导入api
 import { GetSms, Register } from '@/api/login.js'
 // 导入composition-api
-import { reactive, ref } from '@vue/composition-api'
+import { onUnmounted, reactive, ref } from '@vue/composition-api'
 // 导入工具函数，验证相关
 import { stripscript, validateEmails, validatePass, validateCode } from '@/utils/validate'
 export default {
@@ -332,6 +332,11 @@ export default {
           console.log(error)
         })
     }
+    // 页面销毁时
+    onUnmounted(() => {
+      // 清除定时器
+      clearInterval(timer.value)
+    })
 
     //
     // 最后将声明完的都返回出去

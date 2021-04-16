@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { onMounted, reactive } from '@vue/composition-api'
+import { onActivated, onMounted, reactive } from '@vue/composition-api'
 import { GetList, EditInfo } from '@/api/news'
 import { timestampToTime } from '@/utils/common'
 // 引入富文本编辑器 vue-quill-editor
@@ -156,6 +156,10 @@ export default {
     }
     onMounted(() => {
       getCategoryInfo()
+    })
+    onActivated(() => {
+      // 更新id
+      data.id = root.$route.params.id || root.$store.getters['infoDetail/infoId']
       getInfo()
       getQiniuToken()
     })

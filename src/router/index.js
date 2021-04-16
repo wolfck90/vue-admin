@@ -53,6 +53,23 @@ export const defaultRouteMap = [
         component: () => import('../views/console/index')
       }
     ]
+  },
+  // 404页面
+  {
+    path: '/page404',
+    hidden: true,
+    meta: {
+      name: '404',
+      icon: '404'
+    },
+    component: LayOut,
+    children: [
+      {
+        path: '/404',
+        name: '404',
+        component: () => import('../views/404')
+      }
+    ]
   }
 ]
 
@@ -65,6 +82,7 @@ export const asyncRouteMap = [
     path: '/info',
     name: 'Info',
     meta: {
+      keepAlive: true,
       role: ['sale', 'manager'],
       system: 'infoSystem',
       name: '信息管理',
@@ -77,6 +95,7 @@ export const asyncRouteMap = [
         path: '/infoIndex',
         name: 'InfoIndex',
         meta: {
+          keepAlive: true,
           role: ['sale', 'manager'],
           name: '信息列表'
         },
@@ -86,6 +105,7 @@ export const asyncRouteMap = [
         path: '/infoCategory',
         name: 'InfoCategory',
         meta: {
+          keepAlive: true,
           role: ['sale', 'manager'],
           name: '信息分类'
         },
@@ -96,6 +116,7 @@ export const asyncRouteMap = [
         name: 'InfoDetail',
         hidden: true,
         meta: {
+          keepAlive: true,
           role: ['sale', 'manager'],
           name: '信息详情'
         },
@@ -125,10 +146,23 @@ export const asyncRouteMap = [
         component: () => import('../views/user/index')
       }
     ]
+  },
+  // 当所有路由匹配不到之后就跳转到404页面,放到动态路由里面，放在路由最后面
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }
 ]
 
 const router = new VueRouter({
   routes: defaultRouteMap
 })
+// router.$addRoutes = params => {
+//   router.matcher = new VueRouter({
+//     mode: 'hash',
+//     routes: [...defaultRouteMap]
+//   }).matcher
+//   router.addRoutes(params)
+// }
 export default router

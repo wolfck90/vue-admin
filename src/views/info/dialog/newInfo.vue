@@ -109,7 +109,8 @@ export default {
           })
           submitLoading.value = false
           // 提交后清空内容
-          resetFrom()
+          // resetFrom()
+          close()
         })
         .catch(
           submitLoading.value = false

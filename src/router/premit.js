@@ -27,7 +27,9 @@ router.beforeEach((to, from, next) => {
         store.dispatch('permission/getRole').then(res => {
           console.log(res)
           const role = res.role
+          const btnPerm = res.btnPerm
           store.commit('app/Set_Role', role)
+          store.commit('app/Set_Button', btnPerm)
           // const button = res.button
           store.dispatch('permission/creatRouter', role).then(response => {
             const addRouters = store.getters['permission/addRouters']
@@ -36,8 +38,10 @@ router.beforeEach((to, from, next) => {
             router.options.routes = allRouters
             // 添加动态路由
             router.addRoutes(addRouters)
-            // router.matcher = addRouters.matcher
+            console.log(allRouters)
+            console.log(router)
             next({ ...to, replace: true })
+            // console.log(111)
           })
         })
       } else {
